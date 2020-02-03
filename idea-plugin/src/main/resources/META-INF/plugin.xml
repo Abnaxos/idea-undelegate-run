@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<idea-plugin>
+  <idea-version since-build="193"/>
+  <id>ch.raffael.idea.plugins.undelegate-run</id>
+  <name>Un-Delegate Run Actions</name>
+  <version>patched-by-gradle</version>
+  <vendor email="r.herzog@netconomy.net" url="https://stash.netconomy.net/users/rherzog/repos/nc-idea/browse">NETCONOMY Software &amp; Consulting GmbH (Raffael Herzog)</vendor>
+
+  <depends>com.intellij.java</depends>
+  <depends>com.intellij.gradle</depends>
+
+  <description>
+    <![CDATA[
+
+    <p>Allows to delegate build actions to Gradle, but keep run actions in
+    IDEA. This way, you get the best of both worlds: Gradle builds, IDEA
+    runs.</p>
+
+    <p>Enable and configure the un-delegation in <i>Settings / Build,
+    Execution, Deployment / Un-Delegate Run Actions</i>.</p>
+
+    <p>Tested with Gradle only, but it may also work with Maven
+    delegation.</p>
+
+    ]]>
+  </description>
+
+  <project-components>
+    <component>
+      <implementation-class>ch.raffael.idea.plugins.undelegaterun.ProjectPlugin</implementation-class>
+    </component>
+  </project-components>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <projectConfigurable instance="ch.raffael.idea.plugins.undelegaterun.Settings"
+                         groupId="build.tools" order="last"/>
+  </extensions>
+  <extensions defaultExtensionNs="org.jetbrains.plugins.gradle">
+    <executionEnvironmentProvider
+            implementation="ch.raffael.idea.plugins.undelegaterun.UndelegateExecutionEnvironmentProvider"
+            order="first"/>
+  </extensions>
+</idea-plugin>

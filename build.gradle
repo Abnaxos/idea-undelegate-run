@@ -1,0 +1,40 @@
+buildscript {
+    repositories {
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+    dependencies {
+        classpath 'gradle.plugin.org.jetbrains.intellij.plugins:gradle-intellij-plugin:0.4.16'
+    }
+}
+
+
+allprojects {
+
+    buildDir = 'target'
+    apply plugin: 'idea'
+
+    ext.artifactBaseName = buildArtifactBaseName(project)
+
+    afterEvaluate {
+        if (project.plugins.findPlugin('java-base')) {
+            sourceCompatibility = '11'
+            archivesBaseName = ext.artifactBaseName
+        }
+    }
+
+    idea.module {
+        name = project.ext.artifactBaseName
+    }
+}
+
+def buildArtifactBaseName(Project prj) {
+    if (prj == rootProject) {
+        return 'undelegate-run'
+    } else {
+        return buildArtifactBaseName(prj.parent) + '-' + ([
+                : // no mappings
+        ].get(prj.path) ?: prj.name)
+    }
+}
