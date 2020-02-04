@@ -9,10 +9,12 @@ buildscript {
     }
 }
 
+ext.git = local.GitInfo.load(project)
 
 allprojects {
 
     buildDir = 'target'
+    version = git.version
     apply plugin: 'idea'
 
     ext.artifactBaseName = buildArtifactBaseName(project)
